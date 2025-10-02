@@ -144,7 +144,7 @@ const DonationsTable: React.FC<DonationsTableProps> = ({
   
 
   // Create stable empty object reference
-  const emptyFilters = useMemo(() => ({}), []);
+  //const emptyFilters = useMemo(() => ({}), []);
   
   // Reset page when applied filters change
   useEffect(() => {

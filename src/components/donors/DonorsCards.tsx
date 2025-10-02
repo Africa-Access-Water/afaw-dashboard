@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Card, Badge, Button, Spinner, Modal, Table, TextInput } from 'flowbite-react';
-import { IconUser, IconCalendar, IconCurrencyDollar, IconEye, IconSearch, IconAlertTriangle, IconClock } from '@tabler/icons-react';
+import { IconUser, IconCalendar, IconEye, IconSearch, IconAlertTriangle } from '@tabler/icons-react';
 import { Donor, Donation, formatAmount } from '../../hooks/useDonationsData';
 import { fetchDonationsByDonor } from '../../utils/api/donationService';
 
