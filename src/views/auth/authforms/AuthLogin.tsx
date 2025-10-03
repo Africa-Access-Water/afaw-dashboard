@@ -91,8 +91,8 @@ const AuthLogin = () => {
               Remember this Device
             </Label>
           </div>
-          <Link to={"/"} className="text-primary text-sm font-medium">
-            Forgot Password ?
+          <Link to={"/auth/forgot-password"} className="text-primary text-sm font-medium">
+            Forgot Password?
           </Link>
         </div>  
         <Button
