@@ -2,15 +2,9 @@ import axios from "axios";
 import { Project } from "../../types/types/types"; // ✅ adjust path
 
 import { API_BASE_URL } from '../../config';
-const BASE_URL = API_BASE_URL;
-const API_URL = `${BASE_URL}/api/projects`;
+import getAuthHeader from './getAuthHeader';
 
-const getAuthHeader = () => {
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
-  return {
-    Authorization: user?.token ? `Bearer ${user.token}` : "",
-  };
-};
+const API_URL = `${API_BASE_URL}/api/projects`;
 
 // GET all Projects
 export const fetchProjects = async (): Promise<Project[]> => {
