@@ -1,9 +1,43 @@
-import { Badge, Table } from "flowbite-react";
+import { Badge, Table, Spinner } from "flowbite-react";
 import SimpleBar from "simplebar-react";
-import { contacts } from "../../utils/data/ContactsData"; 
+import { useEffect, useState } from "react";
+import { fetchContacts, Contact } from "../../utils/api/contactsService";
 
 const Contacts = () => {
+  const [contacts, setContacts] = useState<Contact[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    const getContacts = async () => {
+      try {
+        const data = await fetchContacts();
+        setContacts(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An error occurred');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getContacts();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-[450px]">
+        <Spinner size="xl" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center h-[450px] text-red-500">
+        {error}
+      </div>
+    );
+  }
 
   return (
     <div className="card-elevated pt-6 px-0 relative w-full break-words">

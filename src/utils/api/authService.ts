@@ -36,6 +36,5 @@ export const logout = () => {
 
 // Get current logged-in user
 export const getCurrentUser = () => {
-  console.log('Fetching current user from localStorage', localStorage.getItem('user'));
   return JSON.parse(localStorage.getItem('user') || '{}');
 };

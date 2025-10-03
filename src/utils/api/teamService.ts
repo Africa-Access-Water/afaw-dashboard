@@ -1,24 +1,8 @@
 import axios from "axios";
-
 import { API_BASE_URL } from '../../config';
-const BASE_URL = API_BASE_URL;
-const API_URL = `${BASE_URL}/api/teams`;
+import getAuthHeader from "./getAuthHeader";
+const API_URL = `${API_BASE_URL}/api/teams`;
 
-
-// Helper to get auth header
-const getAuthHeader = () => {
-  const userData = localStorage.getItem("user");
-  if (!userData) return {};
-
-  try {
-    const parsed = JSON.parse(userData);
-    return {
-      Authorization: `Bearer ${parsed.token}`,
-    };
-  } catch {
-    return {};
-  }
-};
 
 
 // GET all team members
