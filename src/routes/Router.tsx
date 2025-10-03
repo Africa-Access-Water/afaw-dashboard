@@ -20,6 +20,8 @@ const Dashboard = Loadable(lazy(() => import('../views/dashboards/Dashboard')));
 // authentication
 const Login = Loadable(lazy(() => import('../views/auth/login/Login')));
 const Register = Loadable(lazy(() => import('../views/auth/register/Register')));
+const ForgotPassword = Loadable(lazy(() => import('../views/auth/forgot-password/ForgotPassword')));
+const ResetPassword = Loadable(lazy(() => import('../views/auth/reset-password/ResetPassword')));
 const Error = Loadable(lazy(() => import('../views/auth/error/Error')));
 
 // export
@@ -33,6 +35,8 @@ const Router = [
       { path: '/', element: <Login /> },
       { path: '/auth/login', element: <Login /> },
       { path: '/auth/register', element: <Register /> },
+      { path: '/auth/forgot-password', element: <ForgotPassword /> },
+      { path: '/auth/reset-password/:resetToken', element: <ResetPassword /> },
       { path: '404', element: <Error /> },
       { path: '/auth/404', element: <Error /> },
       { path: '*', element: <Navigate to="/auth/404" /> },
