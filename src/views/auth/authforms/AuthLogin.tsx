@@ -1,14 +1,12 @@
 import { Button, Checkbox, Label, TextInput, Alert } from "flowbite-react";
 import { Link, useNavigate } from "react-router";
 import { useState } from "react";
+import { login } from "../../../utils/api/authService";
 
-import { API_BASE_URL } from '../../../config';
-const BASE_URL = API_BASE_URL;
 const AuthLogin = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -20,27 +18,11 @@ const AuthLogin = () => {
     const password = (form.elements.namedItem("password") as HTMLInputElement).value;
 
     try {
-      const res = await fetch(`${BASE_URL}/api/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        // Store the entire response (message, token, user)
-        localStorage.setItem("user", JSON.stringify(data));
-
-        // Redirect to dashboard
-        navigate("/dashboard");
-      } else {
-        setError(data.error || "Login failed");
-      }
+      await login({ email, password });
+      // The login service already handles storing in localStorage
+      navigate("/dashboard");
     } catch (error: any) {
-      setError("Error: " + error.message);
+      setError(error.response?.data?.error || "Error: " + error.message);
     } finally {
       setLoading(false);
     }

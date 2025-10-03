@@ -5,14 +5,8 @@ const BASE_URL = API_BASE_URL;
 const API_URL = `${BASE_URL}/api/auth`;
 
 // Register a new user
-export const register = async (userData: { name: string; email: string; password: string }) => {
-  const res = await axios.post(`${API_URL}/register`, userData);
-
-  // Save user info & token to localStorage
-  if (res.data) {
-    localStorage.setItem('user', JSON.stringify(res.data));
-  }
-
+export const register = async (userData: { name: string; email: string; password: string; role: string }) => {
+  const res = await axios.post(`${API_URL}/signup`, userData);
   return res.data;
 };
 
