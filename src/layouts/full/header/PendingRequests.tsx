@@ -1,42 +1,18 @@
 import { useState, useEffect } from "react";
 import { Badge, Dropdown, Button, Modal, Table } from "flowbite-react";
 import { Icon } from "@iconify/react";
-
-import { API_BASE_URL } from '../../../config';
-const BASE_URL = API_BASE_URL;
-
-interface PendingUser {
-  id: number;
-  name: string;
-  email: string;
-  role: string;
-  avatar_url: string;
-  created_at: string;
-}
+import { getPendingUsers, approveUser, rejectUser, type PendingUser } from "../../../utils/api/userManagementService";
 
 const PendingRequests = () => {
   const [pendingUsers, setPendingUsers] = useState<PendingUser[]>([]);
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
-  const tokenData = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")!) : null;
-
   const fetchPendingUsers = async () => {
-    if (!tokenData) return;
     setLoading(true);
     try {
-      const res = await fetch(`${BASE_URL}/api/auth/pending-users`, {
-        headers: {
-          "Authorization": `Bearer ${tokenData.token}`,
-          "Content-Type": "application/json",
-        },
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setPendingUsers(data.users);
-      } else {
-        setPendingUsers([]);
-      }
+      const users = await getPendingUsers();
+      setPendingUsers(users);
     } catch (err) {
       console.error(err);
       setPendingUsers([]);
@@ -51,17 +27,9 @@ const PendingRequests = () => {
     if (!window.confirm(`Are you sure you want to approve ${user.name} (${user.email}) as a ${user.role}?`)) return;
 
     try {
-      const res = await fetch(`${BASE_URL}/api/auth/approve-user/${userId}`, {
-        method: "PUT",
-        headers: {
-          "Authorization": `Bearer ${tokenData.token}`,
-          "Content-Type": "application/json",
-        },
-      });
-      if (res.ok) {
-        setPendingUsers(prev => prev.filter(u => u.id !== userId));
-        alert(`${user.name} approved successfully`);
-      }
+      await approveUser(userId);
+      setPendingUsers(prev => prev.filter(u => u.id !== userId));
+      alert(`${user.name} approved successfully`);
     } catch (err) {
       console.error(err);
       alert("Error approving user");
@@ -74,17 +42,9 @@ const PendingRequests = () => {
     if (!window.confirm(`Are you sure you want to reject ${user.name} (${user.email})'s registration request? This action cannot be undone.`)) return;
 
     try {
-      const res = await fetch(`${BASE_URL}/api/auth/reject-user/${userId}`, {
-        method: "PUT",
-        headers: {
-          "Authorization": `Bearer ${tokenData.token}`,
-          "Content-Type": "application/json",
-        },
-      });
-      if (res.ok) {
-        setPendingUsers(prev => prev.filter(u => u.id !== userId));
-        alert(`${user.name} rejected successfully`);
-      }
+      await rejectUser(userId);
+      setPendingUsers(prev => prev.filter(u => u.id !== userId));
+      alert(`${user.name} rejected successfully`);
     } catch (err) {
       console.error(err);
       alert("Error rejecting user");

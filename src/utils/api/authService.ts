@@ -11,12 +11,12 @@ export const register = async (userData: { name: string; email: string; password
 };
 
 // Login user
-export const login = async (credentials: { email: string; password: string }) => {
+export const login = async (credentials: { email: string; password: string }, rememberMe: boolean = false) => {
   const res = await axios.post(`${API_URL}/login`, credentials);
 
-  // Save user info & token to localStorage
   if (res.data) {
-    localStorage.setItem('user', JSON.stringify(res.data));
+    const storage = rememberMe ? localStorage : sessionStorage;
+    storage.setItem('user', JSON.stringify(res.data));
   }
 
   return res.data;
@@ -25,10 +25,13 @@ export const login = async (credentials: { email: string; password: string }) =>
 // Logout user
 export const logout = () => {
   localStorage.removeItem('user');
-  sessionStorage.clear();
+  sessionStorage.removeItem('user');
 };
 
 // Get current logged-in user
 export const getCurrentUser = () => {
-  return JSON.parse(localStorage.getItem('user') || '{}');
+  // Try sessionStorage first, then localStorage
+  const sessionUser = sessionStorage.getItem('user');
+  const localUser = localStorage.getItem('user');
+  return JSON.parse(sessionUser || localUser || '{}');
 };

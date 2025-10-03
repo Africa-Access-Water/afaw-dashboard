@@ -7,6 +7,7 @@ const AuthLogin = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -16,10 +17,10 @@ const AuthLogin = () => {
     const form = event.currentTarget;
     const email = (form.elements.namedItem("email") as HTMLInputElement).value;
     const password = (form.elements.namedItem("password") as HTMLInputElement).value;
-
+    console.log("Remember Me:", rememberMe);
     try {
-      await login({ email, password });
-      // The login service already handles storing in localStorage
+      await login({ email, password }, rememberMe);
+      // The login service handles storing in the appropriate storage
       navigate("/dashboard");
     } catch (error: any) {
       setError(error.response?.data?.error || "Error: " + error.message);
@@ -65,9 +66,14 @@ const AuthLogin = () => {
         </div>
         <div className="flex justify-between my-5">
           <div className="flex items-center gap-2">
-            <Checkbox id="accept" className="checkbox" />
+            <Checkbox 
+              id="remember"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+              className="checkbox"
+            />
             <Label
-              htmlFor="accept"
+              htmlFor="remember"
               className="opacity-90 font-normal cursor-pointer"
             >
               Remember this Device
