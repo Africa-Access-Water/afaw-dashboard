@@ -9,6 +9,7 @@ import Posts from 'src/views/posts/Posts';
 import Team from 'src/views/team/Team';
 import Projects from 'src/views/projects/Projects';
 import ProtectedRoute from './ProtectedRoute';
+import PublicRoute from './PublicRoute';
 
 /* ***Layouts**** */
 const FullLayout = Loadable(lazy(() => import('../layouts/full/FullLayout')));
@@ -32,11 +33,11 @@ const Router = [
     path: '/',
     element: <BlankLayout />,
     children: [
-      { path: '/', element: <Login /> },
-      { path: '/auth/login', element: <Login /> },
-      { path: '/auth/register', element: <Register /> },
-      { path: '/auth/forgot-password', element: <ForgotPassword /> },
-      { path: '/auth/reset-password/:resetToken', element: <ResetPassword /> },
+      { path: '/', element: <PublicRoute><Login /></PublicRoute> },
+      { path: '/auth/login', element: <PublicRoute><Login /></PublicRoute> },
+      { path: '/auth/register', element: <PublicRoute><Register /></PublicRoute> },
+      { path: '/auth/forgot-password', element: <PublicRoute><ForgotPassword /></PublicRoute> },
+      { path: '/auth/reset-password/:resetToken', element: <PublicRoute><ResetPassword /></PublicRoute> },
       { path: '404', element: <Error /> },
       { path: '/auth/404', element: <Error /> },
       { path: '*', element: <Navigate to="/auth/404" /> },

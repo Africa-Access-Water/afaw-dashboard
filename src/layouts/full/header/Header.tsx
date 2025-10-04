@@ -8,6 +8,7 @@ import PendingRequests from "./PendingRequests";
 import { Drawer } from "flowbite-react";
 import MobileSidebar from "../sidebar/MobileSidebar";
 import { Link } from "react-router";
+import { getCurrentUser } from "../../../utils/api/authService";
 
 
 const Header = () => {
@@ -32,16 +33,8 @@ const Header = () => {
 
   // Check if user is admin
   useEffect(() => {
-    const userData = localStorage.getItem("user");
-    if (userData) {
-      try {
-        const user = JSON.parse(userData);
-        setIsAdmin(user.user?.role === "admin");
-      } catch (error) {
-        console.error("Error parsing user data:", error);
-        setIsAdmin(false);
-      }
-    }
+    const user = getCurrentUser();
+    setIsAdmin(user?.user?.role === "admin");
   }, []);
 
   // mobile-sidebar

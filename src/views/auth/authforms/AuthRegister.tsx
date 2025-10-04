@@ -1,9 +1,7 @@
 import { Button, Label, TextInput, Select, Alert } from "flowbite-react";
 import { useNavigate } from "react-router";
 import { useState } from "react";
-
-import { API_BASE_URL } from '../../../config';
-const BASE_URL = API_BASE_URL;
+import { register } from "../../../utils/api/authService";
 
 const AuthRegister = () => {
   const navigate = useNavigate();
@@ -22,24 +20,11 @@ const AuthRegister = () => {
     const password = (form.elements.namedItem("password") as HTMLInputElement).value;
 
     try {
-      const res = await fetch(`${BASE_URL}/api/auth/signup`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name, email, role, password }),
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        alert("Registration request sent successfully! Your request is pending approval.");
-        navigate("/auth/login"); // redirect to login page
-      } else {
-        setError(data.error || "Registration request failed");
-      }
+      await register({ name, email, role, password });
+      alert("Registration request sent successfully! Your request is pending approval.");
+      navigate("/auth/login"); // redirect to login page
     } catch (error: any) {
-      setError("Error: " + error.message);
+      setError(error.response?.data?.error || "Error: " + error.message);
     } finally {
       setLoading(false);
     }

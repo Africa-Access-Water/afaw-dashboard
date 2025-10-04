@@ -6,7 +6,7 @@ import { logout, getCurrentUser } from "src/utils/api/authService";
 const Profile = () => {
   const navigate = useNavigate();
   const data = getCurrentUser();
-  const user = data.user || {}; // Ensure user is defined
+  const user = data?.user || {}; // Ensure user is defined
 
   const handleLogout = () => {
     logout();
