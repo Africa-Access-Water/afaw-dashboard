@@ -6,10 +6,11 @@ import getAuthHeader from './getAuthHeader';
 const API_URL = `${API_BASE_URL}/api/donations`;
 
 
-// GET all Donations
-export const fetchDonations = async () => {
+// GET Donations with search/filter params: no params fetches all donations
+export const fetchDonations = async (params?: Record<string, any>) => {
   const res = await axios.get(API_URL, {
     headers: getAuthHeader(),
+    params,
   });
   return res.data;
 };

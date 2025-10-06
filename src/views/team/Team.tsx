@@ -143,7 +143,7 @@ const Team = () => {
             <div className="flex justify-between items-center mt-4">
               {member.socials && (
                 <a
-                  href={member.socials}
+                  href={`https://${member.socials}`}
                   target="_blank"
                   rel="noreferrer"
                   className="text-blue-600 hover:underline text-sm"

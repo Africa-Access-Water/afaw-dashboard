@@ -25,7 +25,7 @@ const RecentDonations = () => {
     try {
       // Fetch both donations and donors data
       const [donationsData, donorsData] = await Promise.all([
-        fetchDonations(),
+        fetchDonations({ status: "completed" }),
         fetchDonors()
       ]);
 
