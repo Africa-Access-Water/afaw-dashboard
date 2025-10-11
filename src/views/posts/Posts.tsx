@@ -182,7 +182,7 @@ if (loading) return <p>Loading posts...</p>;
                 <option value="">Post Type</option>
                 <option value="Article">Article</option>
                 <option value="News">News</option>
-                <option value="Project">Project</option>
+                <option value="Blog">Blog</option>
               </Select>
               <div>
                 <Label htmlFor="image_file" value="Image File" />
