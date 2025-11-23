@@ -38,3 +38,16 @@ export const fetchProjectWithDonations = async (projectId: number) => {
   });
   return res.data;
 };
+
+// POST refund donation
+export const processRefund = async (id: string, amount?: number) => {
+  const payload: { id: string; amount?: number } = { id };
+  if (amount) {
+    payload.amount = amount;
+  }
+
+  const res = await axios.post(`${API_URL}/refund`, payload, {
+    headers: getAuthHeader(),
+  });
+  return res.data;
+};

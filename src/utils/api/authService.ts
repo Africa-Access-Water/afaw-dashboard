@@ -35,3 +35,12 @@ export const getCurrentUser = () => {
   const localUser = localStorage.getItem('user');
   return JSON.parse(sessionUser || localUser || '{}');
 };
+
+// Check if user has specific role
+export const hasRole = (role: string): boolean => {
+  const user = getCurrentUser();
+  return user?.user?.role?.toLowerCase?.() === role.toLowerCase();
+};
+
+// Convenience helper for admin role
+export const isAdmin = (): boolean => hasRole('admin');
