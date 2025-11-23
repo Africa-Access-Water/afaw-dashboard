@@ -57,6 +57,7 @@ const Donations = () => {
         <DonationsTable
           donations={donations}
           loading={loading}
+          refetch={refetch}
         />
       </CardBox>
     </div>

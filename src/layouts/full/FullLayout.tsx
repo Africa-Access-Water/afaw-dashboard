@@ -25,7 +25,7 @@ const FullLayout: FC = () => {
               className={`w-full`}
             >
               <ScrollToTop>
-                <div className="container py-30">
+                <div className="px-4 md:px-8 lg:px-12 pt-6 pb-8 min-h-[calc(100vh_-_100px)]">
                 <Outlet/>
                 </div>
               </ScrollToTop>

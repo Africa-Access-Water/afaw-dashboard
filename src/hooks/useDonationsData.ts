@@ -8,7 +8,7 @@ export interface Donation {
   project_id?: number;
   amount: number;
   currency: string;
-  status: 'initiated' | 'pending' | 'completed' | 'failed' | 'expired';
+  status: 'initiated' | 'pending' | 'completed' | 'failed' | 'expired' | 'refunded';
   type: 'one-time' | 'subscription';
   stripe_checkout_session_id?: string;
   stripe_payment_intent?: string;
@@ -34,6 +34,7 @@ export interface Donor {
   completed_donation_count?: number;
   failed_donation_count?: number;
   expired_donation_count?: number;
+  refunded_donation_count?: number;
   has_failed_payments?: boolean;
   has_expired_payments?: boolean;
   last_donation_date?: string;
@@ -114,13 +115,14 @@ export const useDonationsData = () => {
 
       const enrichedDonors = donorsData
         .map((donor: any) => {
-          // Only consider donations with completed, expired, or failed status
+          // Only consider donations with completed, expired, failed, or refunded status
           const relevantDonations = enrichedDonations.filter((d: Donation) => 
-            d.donor_id === donor.id && ['completed', 'expired', 'failed'].includes(d.status)
+            d.donor_id === donor.id && ['completed', 'expired', 'failed', 'refunded'].includes(d.status)
           );
           const completedDonations = relevantDonations.filter((d: Donation) => d.status === 'completed');
           const failedDonations = relevantDonations.filter((d: Donation) => d.status === 'failed');
           const expiredDonations = relevantDonations.filter((d: Donation) => d.status === 'expired');
+          const refundedDonations = relevantDonations.filter((d: Donation) => d.status === 'refunded');
           
           const totalDonated = completedDonations.reduce((sum: number, d: Donation) => sum + d.amount, 0);
           const lastDonation = completedDonations
@@ -137,6 +139,7 @@ export const useDonationsData = () => {
             completed_donation_count: completedDonations.length,
             failed_donation_count: failedDonations.length,
             expired_donation_count: expiredDonations.length,
+            refunded_donation_count: refundedDonations.length,
             has_failed_payments: failedDonations.length > 0,
             has_expired_payments: expiredDonations.length > 0,
             last_donation_date: lastDonation?.created_at,

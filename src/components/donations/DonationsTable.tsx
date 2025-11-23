@@ -6,22 +6,27 @@ import DataTableFilters, { FilterConfig } from '../shared/DataTableFilters';
 import PDFDownloadButton from '../pdf/PDFDownloadButton';
 import { Donation, formatAmount } from '../../hooks/useDonationsData';
 import { fetchProjects } from '../../utils/api/projectService';
+import RefundButton from './RefundButton';
+import { isAdmin } from '../../utils/api/authService';
 
 interface DonationsTableProps {
   donations: Donation[];
   loading: boolean;
   itemsPerPage?: number;
+  refetch?: () => void;
 }
 
 const DonationsTable: React.FC<DonationsTableProps> = ({
   donations,
   loading,
-  itemsPerPage = 20
+  itemsPerPage = 20,
+  refetch
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState('');
   const [filterValues, setFilterValues] = useState<Record<string, any>>({ status: 'completed' });
   const [projects, setProjects] = useState<Array<{id: number, name: string}>>([]);
+  const userIsAdmin = isAdmin();
   
   // Separate state for applied filters (what's actually used for filtering)
   const [appliedSearchValue, setAppliedSearchValue] = useState('');
@@ -49,7 +54,8 @@ const DonationsTable: React.FC<DonationsTableProps> = ({
       options: [
         { value: 'completed', label: 'Completed' },
         { value: 'failed', label: 'Failed' },
-        { value: 'expired', label: 'Expired' }
+        { value: 'expired', label: 'Expired' },
+        { value: 'refunded', label: 'Refunded' }
       ]
     },
     {
@@ -93,7 +99,7 @@ const DonationsTable: React.FC<DonationsTableProps> = ({
   const filteredDonations = useMemo(() => {
     // Pre-filter donations to only show completed, expired, and failed statuses
     let filtered = donations.filter(donation => 
-      ['completed', 'expired', 'failed'].includes(donation.status)
+      ['completed', 'expired', 'failed', 'refunded'].includes(donation.status)
     );
 
     // Search filter
@@ -176,6 +182,7 @@ const DonationsTable: React.FC<DonationsTableProps> = ({
       case 'pending': return 'warning';
       case 'failed': return 'failure';
       case 'expired': return 'gray';
+      case 'refunded': return 'warning';
       case 'initiated': return 'info';
       default: return 'gray';
     }
@@ -218,7 +225,7 @@ const DonationsTable: React.FC<DonationsTableProps> = ({
 
       {/* Table */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
-        <SimpleBar className="max-h-[600px]">
+        <SimpleBar className="max-h-[700px]">
           <div className="overflow-x-auto">
             <Table hoverable key={`table-${filteredDonations.length}-${currentPage}`}>
               <Table.Head>
@@ -227,7 +234,7 @@ const DonationsTable: React.FC<DonationsTableProps> = ({
                 <Table.HeadCell>Status</Table.HeadCell>
                 <Table.HeadCell>Project</Table.HeadCell>
                 <Table.HeadCell>Date</Table.HeadCell>
-                <Table.HeadCell>Actions</Table.HeadCell>
+                <Table.HeadCell className="w-44">Actions</Table.HeadCell>
               </Table.Head>
               <Table.Body key={`body-${paginatedDonations.length}-${paginatedDonations.map(d => d.id).join('-')}`} className="divide-y divide-gray-200 dark:divide-gray-700">
                 {paginatedDonations.length === 0 ? (
@@ -298,6 +305,17 @@ const DonationsTable: React.FC<DonationsTableProps> = ({
                           }}
                           size="xs"
                         />
+
+                        {userIsAdmin && donation.status === 'completed' && donation.stripe_payment_intent && (
+                          <RefundButton
+                            paymentIntentId={donation.stripe_payment_intent}
+                            donorName={donation.donor_name || 'Unknown'}
+                            amount={Number(donation.amount)}
+                            currency={donation.currency}
+                            donationId={donation.id}
+                            onRefundSuccess={() => refetch?.()}
+                          />
+                        )}
                       </div>
                     </Table.Cell>
                   </Table.Row>

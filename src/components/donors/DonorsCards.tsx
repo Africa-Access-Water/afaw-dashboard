@@ -22,9 +22,9 @@ const DonorsCards: React.FC<DonorsCardsProps> = ({ donors, loading }) => {
     // Fetch donations for this donor
     try {
       const donations = await fetchDonationsByDonor(donor.id);
-      // Only show completed, expired, and failed donations
+      // Only show statuses relevant to donor history, including refunds
       const relevantDonations = donations.filter((donation: Donation) => 
-        ['completed', 'expired', 'failed'].includes(donation.status)
+        ['completed', 'expired', 'failed', 'refunded'].includes(donation.status)
       );
       setDonorDonations(relevantDonations);
     } catch (error) {
@@ -52,6 +52,7 @@ const DonorsCards: React.FC<DonorsCardsProps> = ({ donors, loading }) => {
       case 'pending': return 'warning';
       case 'failed': return 'failure';
       case 'expired': return 'gray';
+      case 'refunded': return 'warning';
       case 'initiated': return 'info';
       default: return 'gray';
     }
@@ -180,6 +181,11 @@ const DonorsCards: React.FC<DonorsCardsProps> = ({ donors, loading }) => {
                       {donor.expired_donation_count}
                     </Badge>
                   )}
+                  {(donor.refunded_donation_count || 0) > 0 && (
+                    <Badge color="warning" size="sm" className="bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-300">
+                      {donor.refunded_donation_count}
+                    </Badge>
+                  )}
                 </div>
               </div>
             </div>
@@ -214,7 +220,7 @@ const DonorsCards: React.FC<DonorsCardsProps> = ({ donors, loading }) => {
           {selectedDonor && (
             <div className="space-y-6">
               {/* Donor Summary */}
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
                 <div className="text-center">
                   <div className="text-2xl font-bold text-green-600 dark:text-green-400">
                     {selectedDonor.primary_currency 
@@ -241,6 +247,12 @@ const DonorsCards: React.FC<DonorsCardsProps> = ({ donors, loading }) => {
                     {selectedDonor.expired_donation_count || 0}
                   </div>
                   <div className="text-sm text-gray-500">Expired</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">
+                    {selectedDonor.refunded_donation_count || 0}
+                  </div>
+                  <div className="text-sm text-gray-500">Refunded</div>
                 </div>
               </div>
 
