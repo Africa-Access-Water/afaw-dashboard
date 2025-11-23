@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, Modal, Spinner, Alert } from 'flowbite-react';
 import { IconCurrencyDollar, IconAlertTriangle } from '@tabler/icons-react';
 import { processRefund } from '../../utils/api/donationService';
+import { isAdmin } from 'src/utils/api/authService';
 
 interface RefundButtonProps {
   paymentIntentId: string;
@@ -26,6 +27,11 @@ const RefundButton: React.FC<RefundButtonProps> = ({
   const [success, setSuccess] = useState(false);
 
   const handleRefund = async () => {
+    const userIsAdmin = isAdmin();
+    if (!userIsAdmin) {
+      setError('You do not have permission to perform this action.');
+      return;
+    }
     if (!paymentIntentId) {
       setError('No payment intent ID available for this donation.');
       return;
@@ -89,7 +95,7 @@ const RefundButton: React.FC<RefundButtonProps> = ({
             <div className="space-y-4">
               <div className="flex items-center gap-3 p-4 bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-800 rounded-lg">
                 <IconAlertTriangle className="text-yellow-600" size={28} />
-                <div className="text-sm text-yellow-800">
+                <div className="text-sm text-yellow-800 dark:text-yellow-200">
                   <p className="font-semibold">This action cannot be undone.</p>
                   <p>The full donation amount will be refunded to the donor.</p>
                 </div>

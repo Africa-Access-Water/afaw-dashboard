@@ -26,7 +26,7 @@ const DonationsTable: React.FC<DonationsTableProps> = ({
   const [searchValue, setSearchValue] = useState('');
   const [filterValues, setFilterValues] = useState<Record<string, any>>({ status: 'completed' });
   const [projects, setProjects] = useState<Array<{id: number, name: string}>>([]);
-  const userIsAdmin = useMemo(() => isAdmin(), []);
+  const userIsAdmin = isAdmin();
   
   // Separate state for applied filters (what's actually used for filtering)
   const [appliedSearchValue, setAppliedSearchValue] = useState('');
@@ -38,8 +38,6 @@ const DonationsTable: React.FC<DonationsTableProps> = ({
       try {
         const projectsData = await fetchProjects();
         setProjects(projectsData);
-        console.log('Fetched projects for filters:', projectsData);
-        console.log("admin", isAdmin());
       } catch (error) {
         console.error('Error fetching projects:', error);
       }

@@ -42,6 +42,8 @@ export const fetchProjectWithDonations = async (projectId: number) => {
 // POST refund donation
 export const processRefund = async (id: string, amount?: number) => {
   const payload: { id: string; amount?: number } = { id };
+  // Include amount only for partial refunds: yet to be implemented on backend for partial refunds
+  //So normally amount will be undefined and full refund will be processed
   if (amount) {
     payload.amount = amount;
   }

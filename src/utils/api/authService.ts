@@ -39,7 +39,7 @@ export const getCurrentUser = () => {
 // Check if user has specific role
 export const hasRole = (role: string): boolean => {
   const user = getCurrentUser();
-  return user?.user?.role?.toLowerCase?.() === role.toLowerCase();
+  return user?.user?.role && typeof user.user.role === 'string' && user.user.role.toLowerCase() === role.toLowerCase();
 };
 
 // Convenience helper for admin role
