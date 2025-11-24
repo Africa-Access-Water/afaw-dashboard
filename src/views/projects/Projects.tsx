@@ -262,7 +262,7 @@ const Projects = () => {
       </div>
 
       {/* Create Modal */}
-      <Modal show={showCreateModal} size="4xl" onClose={() => setShowCreateModal(false)}>
+      <Modal show={showCreateModal} size="6xl" onClose={() => setShowCreateModal(false)}>
         <Modal.Header>Create New Project</Modal.Header>
         <Modal.Body>
           <form onSubmit={handleAddProject} className="grid grid-cols-12 gap-6">
@@ -282,7 +282,7 @@ const Projects = () => {
                   placeholder="Enter project description"
                   required
                   className="block w-full rounded border border-gray-300 text-sm text-gray-900 bg-gray-50"
-                  rows={3}
+                  rows={12}
                 />
               </div>
 
@@ -370,48 +370,63 @@ const Projects = () => {
       </Modal>
 
       {/* Edit Modal */}
-      <Modal show={showEditModal} size="4xl" onClose={() => setShowEditModal(false)}>
+      <Modal show={showEditModal} size="6xl" onClose={() => setShowEditModal(false)}>
         <Modal.Header>Update Project</Modal.Header>
         <Modal.Body>
           {selectedProject && (
             <form onSubmit={handleUpdateProject} className="grid grid-cols-12 gap-6">
               <div className="col-span-12 flex flex-col gap-4">
                 {/* Title */}
-                <TextInput id="name" name="name" defaultValue={selectedProject.name} required />
+                <div>
+                  <Label htmlFor="name" value="Title" />
+                  <TextInput id="name" name="name" defaultValue={selectedProject.name} required />
+                </div>
 
                 {/* Description */}
-                <textarea
-                  id="description"
-                  name="description"
-                  defaultValue={selectedProject.description}
-                  required
-                  className="block w-full rounded border border-gray-300 text-sm text-gray-900 bg-gray-50"
-                  rows={3}
-                />
+                <div>
+                  <Label htmlFor="description" value="Description" />
+                  <textarea
+                    id="description"
+                    name="description"
+                    defaultValue={selectedProject.description}
+                    required
+                    className="block w-full rounded border border-gray-300 text-sm text-gray-900 bg-gray-50"
+                    rows={12}
+                  />
+                </div>
 
                 {/* Category */}
-                <TextInput
-                  id="category"
-                  name="category"
-                  defaultValue={selectedProject.category || ''}
-                />
+                <div>
+                  <Label htmlFor="category" value="Category" />
+                  <TextInput
+                    id="category"
+                    name="category"
+                    defaultValue={selectedProject.category || ''}
+                  />
+                </div>
 
                 {/* Donation Goal / Raised */}
                 <div className="grid grid-cols-2 gap-4">
-                  <TextInput
-                    id="donation_goal"
-                    name="donation_goal"
-                    type="number"
-                    step="0.01"
-                    defaultValue={selectedProject.donation_goal ?? 0}
-                  />
-                  <TextInput
-                    id="donation_raised"
-                    name="donation_raised"
-                    type="number"
-                    step="0.01"
-                    defaultValue={selectedProject.donation_raised ?? 0}
-                  />
+                  <div>
+                    <Label htmlFor="donation_goal" value="Donation Goal" />
+                    <TextInput
+                      id="donation_goal"
+                      name="donation_goal"
+                      type="number"
+                      step="0.01"
+                      defaultValue={selectedProject.donation_goal ?? 0}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="donation_raised" value="Donation Raised" />
+                    <TextInput
+                      id="donation_raised"
+                      name="donation_raised"
+                      type="number"
+                      step="0.01"
+                      defaultValue={selectedProject.donation_raised ?? 0}
+                    />
+                  </div>
                 </div>
 
                 {/* Cover Image */}

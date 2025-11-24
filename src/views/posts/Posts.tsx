@@ -172,7 +172,7 @@ if (loading) return <p>Loading posts...</p>;
       </div>
 
       {/* Create Post Modal */}
-      <Modal show={showCreateModal} size="4xl" onClose={() => setShowCreateModal(false)}>
+      <Modal show={showCreateModal} size="6xl" onClose={() => setShowCreateModal(false)}>
         <Modal.Header>Publish New Post</Modal.Header>
         <Modal.Body>
           <form onSubmit={handleAddPost} className="grid grid-cols-12 gap-6">
@@ -197,14 +197,14 @@ if (loading) return <p>Loading posts...</p>;
               </div>
             </div>
 
-            <div className="col-span-12 lg:col-span-6 flex flex-col gap-4">
+            <div className="col-span-12 flex flex-col gap-4">
               <textarea
                 id="content"
                 name="content"
                 placeholder="Enter post content"
                 required
                 className="block w-full rounded border border-gray-300 text-sm text-gray-900 bg-gray-50"
-                rows={8}
+                rows={14}
               />
             </div>
 
@@ -221,7 +221,7 @@ if (loading) return <p>Loading posts...</p>;
       </Modal>
 
       {/* Edit Post Modal */}
-      <Modal show={showEditModal} size="4xl" onClose={() => setShowEditModal(false)}>
+      <Modal show={showEditModal} size="6xl" onClose={() => setShowEditModal(false)}>
         <Modal.Header>Update your Post</Modal.Header>
         <Modal.Body>
           {selectedPost && (
@@ -252,14 +252,14 @@ if (loading) return <p>Loading posts...</p>;
                 </div>
               </div>
 
-              <div className="col-span-12 lg:col-span-6 flex flex-col gap-4">
+              <div className="col-span-12 flex flex-col gap-4">
                 <textarea
                   id="content"
                   name="content"
                   defaultValue={selectedPost.content}
                   required
                   className="block w-full rounded border border-gray-300 text-sm text-gray-900 bg-gray-50"
-                  rows={8}
+                  rows={14}
                 />
               </div>
 
